@@ -9,11 +9,11 @@ from PyPDF2 import PdfFileMerger
 
 # Update the following accordingly
 list_topics = ['Interaction Design',
-               'Machine Learning and Real-world Data'] # list of topics you want to download, specified by csv below
-locked_solutions = [2018, 2019]
-flag_reverse_merge_pdf = True
-flag_merge_pdfs = True
-flag_excludeNoSols = True # exclude papers with no solutions
+               'Machine Learning and Real-world Data'] # list of topics you want to download, topic names are specified by csv below
+locked_solutions = [2018, 2019] # solutions only viewable by supervisors
+flag_reverse_merge_pdf = True # merge papers in descending order of year
+flag_merge_pdfs = True # merge questions into a single pdf
+flag_excludeNoSols = True # exclude papers with no solutions accessible
 download_wait_time = 15 # to adjust, or even reduce to 0, depending on your Internet speed
 
 crsid = '' # raven username
@@ -22,7 +22,7 @@ download_folder = r"C:\Users\Admin\Downloads"
 chromedriver_filepath = r'C:\Users\Admin\Downloads\chromedriver_win32\chromedriver.exe' # you will need to download chromedriver first: https://chromedriver.chromium.org/downloads
 working_dir = r'C:\Users\Admin\Desktop\PYP' # where you want to download and merge the PDFs
 
-csv = 'https://www.cl.cam.ac.uk/teaching/exams/pastpapers/index.csv';
+csv = 'https://www.cl.cam.ac.uk/teaching/exams/pastpapers/index.csv'; # specifies questions and solutions available online
 
 def site_login(list_pdf_url, download_folder):
    options = Options()
@@ -91,6 +91,6 @@ for topic in list_topics:
    try:
       merge_pdf_each_folder(os.path.join(working_dir, topic, 'Solutions'), reverse=flag_reverse_merge_pdf)
    except FileNotFoundError:
-      print(topic, "was only started recently in %s, no solutions available", ' or '.join(locked_solutions))
+      print(topic, "was only started recently in %s, no solutions available", str(min(locked_solutions)))
    # to wait for the downloads to complete
    time.sleep(download_wait_time)
